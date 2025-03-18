@@ -1,0 +1,117 @@
+﻿<Window x:Class="JsonDatabaseMergeApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Работа с JSON базами данных"
+        Height="400" Width="700" ResizeMode="NoResize" Background="#f0f0f0">
+
+    <Grid Margin="10">
+        <TabControl>
+            <!-- Вкладка 1: Объединение JSON баз -->
+            <TabItem Header="Объединение баз">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Объединение JSON баз данных" FontSize="18" FontWeight="Bold"
+                               HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+                    <Grid Grid.Row="1" Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Первая база данных:" FontSize="14" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0"/>
+                        <TextBox Name="TxtFirstDbPath" Width="300" IsReadOnly="True" Grid.Column="1" Margin="0,0,10,0"/>
+                        <Button Name="BtnSelectFirst" Content="Выбрать" Width="100" Click="BtnSelectFirst_Click" Grid.Column="2" HorizontalAlignment="Right"/>
+                    </Grid>
+
+                    <Grid Grid.Row="2" Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Вторая база данных:" FontSize="14" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0"/>
+                        <TextBox Name="TxtSecondDbPath" Width="300" IsReadOnly="True" Grid.Column="1" Margin="0,0,10,0"/>
+                        <Button Name="BtnSelectSecond" Content="Выбрать" Width="100" Click="BtnSelectSecond_Click" Grid.Column="2" HorizontalAlignment="Right"/>
+                    </Grid>
+
+                    <StackPanel Grid.Row="3" Margin="0,10">
+                        <TextBlock Text="Прогресс объединения:" FontSize="14"/>
+                        <ProgressBar Name="ProgressMerge" Height="20" Width="500" Minimum="0" Maximum="100"/>
+                    </StackPanel>
+
+                    <Button Name="BtnCreateDatabase" Content="Создать объединённую базу" Width="270" Height="45"
+                            HorizontalAlignment="Center" Grid.Row="4" Background="#4CAF50" Foreground="White" FontSize="14"
+                            Click="BtnCreateDatabase_Click" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+
+            <!-- Вкладка 2: Фильтрация по ID съемки -->
+            <TabItem Header="Создание базы по ID съемки">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Фильтрация данных по ID съемки" FontSize="18" FontWeight="Bold"
+                               HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+                    <Grid Grid.Row="1" Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Выберите базу данных:" FontSize="14" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0"/>
+                        <TextBox Name="TxtDbPath" Width="300" IsReadOnly="True" Grid.Column="1" Margin="0,0,10,0"/>
+                        <Button Name="BtnSelectDb" Content="Выбрать" Width="100" Click="BtnSelectDb_Click" Grid.Column="2" HorizontalAlignment="Right"/>
+                    </Grid>
+
+                    <Grid Grid.Row="2" Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="ID съемки:" FontSize="14" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0"/>
+                        <ComboBox Name="CmbSurveyId" Width="200" Grid.Column="1" Margin="0,0,10,0"/>
+                    </Grid>
+
+                    <Button Name="BtnCreateFilteredDatabase" Content="Создать базу" Width="270" Height="45"
+                            HorizontalAlignment="Center" Grid.Row="3" Background="#2196F3" Foreground="White" FontSize="14"
+                            Click="BtnCreateFilteredDatabase_Click" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- Кнопка переключения боковой панели -->
+        <Button x:Name="ToggleSidebarButton" Content="❯" Width="30" Height="60"
+                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"
+                Click="ToggleSidebar_Click"/>
+
+        <!-- Боковая панель -->
+        <Border x:Name="SidebarPanel" Background="#E0E0E0" Width="250" Padding="5"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Right"
+                Visibility="Hidden"
+                Margin="0 0 -250 0">
+
+            <StackPanel>
+                <Button x:Name="CloseSidebarButton" Content="❌" Width="30" Height="30"
+                        HorizontalAlignment="Right" Click="ToggleSidebar_Click"/>
+                <TextBlock Text="Содержание баз данных" FontSize="16" FontWeight="Bold" Margin="10"/>
+                <TreeView x:Name="DatabaseTreeView" Margin="10" Width="230" Height="Auto"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
