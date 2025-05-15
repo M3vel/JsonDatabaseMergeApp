@@ -2,14 +2,15 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Работа с JSON базами данных"
-        Height="400" Width="700" ResizeMode="NoResize" Background="#f0f0f0">
+        Height="400" Width="700" ResizeMode="NoResize" Background="#343A40">
 
-    <Grid Margin="10">
-        <TabControl>
+    <Grid Margin="10" Background="#343A40">
+        <TabControl Background="#343A40">
             <!-- Вкладка 1: Объединение JSON баз -->
-            <TabItem Header="Объединение баз">
+            <TabItem Header="Интеграция баз данных" Background="White" FontFamily="Tahoma" FontSize="14">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -17,8 +18,8 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Объединение JSON баз данных" FontSize="18" FontWeight="Bold"
-                               HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                    <TextBlock Text="Интеграция JSON-баз данных" FontSize="18" FontWeight="Bold"
+                               HorizontalAlignment="Center" Margin="0,0,0,10" Foreground="White" FontFamily="Tahoma"/>
 
                     <Grid Grid.Row="1" Margin="0,5">
                         <Grid.ColumnDefinitions>
@@ -26,9 +27,9 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Первая база данных:" FontSize="14" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0"/>
+                        <TextBlock Text="Первая база данных:" FontSize="14" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0" Foreground="White" FontFamily="Tahoma"/>
                         <TextBox Name="TxtFirstDbPath" Width="300" IsReadOnly="True" Grid.Column="1" Margin="0,0,10,0"/>
-                        <Button Name="BtnSelectFirst" Content="Выбрать" Width="100" Click="BtnSelectFirst_Click" Grid.Column="2" HorizontalAlignment="Right"/>
+                        <Button Name="BtnSelectFirst" Content="Выбрать" Width="100" Click="BtnSelectFirst_Click" Grid.Column="2" HorizontalAlignment="Right" Background="#FFFFFF" FontFamily="Tahoma"/>
                     </Grid>
 
                     <Grid Grid.Row="2" Margin="0,5">
@@ -37,26 +38,30 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Вторая база данных:" FontSize="14" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0"/>
+                        <TextBlock Text="Вторая база данных:" FontSize="14" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0" Foreground="White" FontFamily="Tahoma"/>
                         <TextBox Name="TxtSecondDbPath" Width="300" IsReadOnly="True" Grid.Column="1" Margin="0,0,10,0"/>
-                        <Button Name="BtnSelectSecond" Content="Выбрать" Width="100" Click="BtnSelectSecond_Click" Grid.Column="2" HorizontalAlignment="Right"/>
+                        <Button Name="BtnSelectSecond" Content="Выбрать" Width="100" Click="BtnSelectSecond_Click" Grid.Column="2" HorizontalAlignment="Right" Background="#FFFFFF" FontFamily="Tahoma"/>
                     </Grid>
 
                     <StackPanel Grid.Row="3" Margin="0,10">
-                        <TextBlock Text="Прогресс объединения:" FontSize="14"/>
-                        <ProgressBar Name="ProgressMerge" Height="20" Width="500" Minimum="0" Maximum="100"/>
+                        <TextBlock Text="Прогресс объединения:" FontSize="14" Foreground="White" FontFamily="Tahoma"/>
+                        <ProgressBar Name="ProgressMerge" Height="20" Width="500" Minimum="0" Maximum="100" />
                     </StackPanel>
 
                     <Button Name="BtnCreateDatabase" Content="Создать объединённую базу" Width="270" Height="45"
-                            HorizontalAlignment="Center" Grid.Row="4" Background="#4CAF50" Foreground="White" FontSize="14"
-                            Click="BtnCreateDatabase_Click" VerticalAlignment="Top"/>
+                            HorizontalAlignment="Center" Grid.Row="4" Background="#36889b" Foreground="White" FontSize="14"
+                            Click="BtnCreateDatabase_Click" VerticalAlignment="Top" FontFamily="Tahoma"/>
+                    <Button Name="BtnIntegrated_Click" Content="Отчёты по интеграции" Width="270" Height="45"
+                            HorizontalAlignment="Center" Grid.Row="5" Background="#36889b" Foreground="White" FontSize="14"
+                            Click="BtnOpenIntegrationReports_Click" VerticalAlignment="Top" Margin="0, 10" FontFamily="Tahoma"/>
                 </Grid>
             </TabItem>
 
             <!-- Вкладка 2: Фильтрация по ID съемки -->
-            <TabItem Header="Создание базы по ID съемки">
+            <TabItem Header="Экспорт данных по ID съёмки" FontFamily="Tahoma" FontSize="14">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -64,8 +69,8 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Фильтрация данных по ID съемки" FontSize="18" FontWeight="Bold"
-                               HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                    <TextBlock Text="Экспорт данных по ID съемки" FontSize="18" FontWeight="Bold"
+                               HorizontalAlignment="Center" Margin="0,0,0,10" Foreground="White" FontFamily="Tahoma"/>
 
                     <Grid Grid.Row="1" Margin="0,5">
                         <Grid.ColumnDefinitions>
@@ -73,9 +78,9 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Выберите базу данных:" FontSize="14" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0"/>
+                        <TextBlock Text="Выберите базу данных:" FontSize="14" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0" Foreground="White" FontFamily="Tahoma"/>
                         <TextBox Name="TxtDbPath" Width="300" IsReadOnly="True" Grid.Column="1" Margin="0,0,10,0"/>
-                        <Button Name="BtnSelectDb" Content="Выбрать" Width="100" Click="BtnSelectDb_Click" Grid.Column="2" HorizontalAlignment="Right"/>
+                        <Button Name="BtnSelectDb" Content="Выбрать" Width="100" Click="BtnSelectDb_Click" Grid.Column="2" HorizontalAlignment="Right" Background="#FFFFFF" FontFamily="Tahoma"/>
                     </Grid>
 
                     <Grid Grid.Row="2" Margin="0,5">
@@ -83,13 +88,21 @@
                             <ColumnDefinition Width="160"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="ID съемки:" FontSize="14" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0"/>
-                        <ComboBox Name="CmbSurveyId" Width="200" Grid.Column="1" Margin="0,0,10,0"/>
+                        <TextBlock Text="ID съемки:" FontSize="14" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,10,0" Foreground="White" FontFamily="Tahoma"/>
+                        <ComboBox Name="CmbSurveyId" Width="200" Grid.Column="1" Margin="0,0,10,0" Background="#FFFFFF"/>
                     </Grid>
+                    <StackPanel Grid.Row="3" Margin="0,10">
+                        <TextBlock Text="Прогресс экспорта:" FontSize="14" Foreground="White" FontFamily="Tahoma"/>
+                        <ProgressBar Name="ProgressExport" Height="20" Width="500" Minimum="0" Maximum="100"/>
+                    </StackPanel>
 
-                    <Button Name="BtnCreateFilteredDatabase" Content="Создать базу" Width="270" Height="45"
-                            HorizontalAlignment="Center" Grid.Row="3" Background="#2196F3" Foreground="White" FontSize="14"
-                            Click="BtnCreateFilteredDatabase_Click" VerticalAlignment="Top"/>
+                    <Button Name="BtnCreateFilteredDatabase" Content="Экспортировать данные" Width="270" Height="45"
+                            HorizontalAlignment="Center" Grid.Row="4" Background="#36889b" Foreground="White" FontSize="14"
+                            Click="BtnCreateFilteredDatabase_Click" VerticalAlignment="Top" FontFamily="Tahoma"/>
+                    <Button Name="BtnExportLogs" Content="Отчёты по экспорту" Width="270" Height="45"
+                            HorizontalAlignment="Center" Grid.Row="5" Background="#36889b" Foreground="White" FontSize="14"
+                            Click="BtnOpenExportReports_Click" VerticalAlignment="Top" Margin="0, 10" FontFamily="Tahoma"/>
+                    
                 </Grid>
             </TabItem>
         </TabControl>
@@ -97,21 +110,39 @@
         <!-- Кнопка переключения боковой панели -->
         <Button x:Name="ToggleSidebarButton" Content="❯" Width="30" Height="60"
                 HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"
-                Click="ToggleSidebar_Click"/>
+                Click="ToggleSidebar_Click" Background="#FFFFFF"/>
 
         <!-- Боковая панель -->
-        <Border x:Name="SidebarPanel" Background="#E0E0E0" Width="250" Padding="5"
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Right"
-                Visibility="Hidden"
-                Margin="0 0 -250 0">
+        <Border x:Name="SidebarPanel" Background="#3E444A" Width="250" Padding="10"
+        VerticalAlignment="Stretch"
+        HorizontalAlignment="Right"
+        Visibility="Hidden"
+        Margin="0 0 -250 0">
 
-            <StackPanel>
-                <Button x:Name="CloseSidebarButton" Content="❌" Width="30" Height="30"
-                        HorizontalAlignment="Right" Click="ToggleSidebar_Click"/>
-                <TextBlock Text="Содержание баз данных" FontSize="16" FontWeight="Bold" Margin="10"/>
-                <TreeView x:Name="DatabaseTreeView" Margin="10" Width="230" Height="Auto"/>
-            </StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Заголовок с кнопкой закрытия -->
+                <DockPanel Grid.Row="0" LastChildFill="False">
+                    <TextBlock Text="Содержание баз данных"
+                       FontSize="16" FontWeight="Bold" Foreground="White"
+                       VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <Button x:Name="CloseSidebarButton" Content="❌" Width="30" Height="30"
+                    DockPanel.Dock="Right" Click="ToggleSidebar_Click" HorizontalAlignment="Right"/>
+                </DockPanel>
+
+                <!-- Иерархический список -->
+                <TreeView x:Name="DatabaseTreeView"
+                  Grid.Row="1"
+                  Margin="5,10,5,5"
+                  Background="White"
+                  BorderThickness="0"
+                  VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch"/>
+            </Grid>
         </Border>
     </Grid>
 </Window>
