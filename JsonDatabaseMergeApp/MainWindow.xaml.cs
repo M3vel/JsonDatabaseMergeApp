@@ -21,7 +21,6 @@ namespace JsonDatabaseMergeApp
         private string thirdDatabasePath;
         private bool isSidebarVisible = false;//1
         private List<Dictionary<string, object>> jsonData = new();//2
-        string userDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         private string integrationReportsDir;
         private string exportReportsDir;
 
@@ -34,10 +33,11 @@ namespace JsonDatabaseMergeApp
 
         private void InitializeReportPaths()
         {
-            string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            //string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string userDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            integrationReportsDir = Path.Combine(appDirectory, "Reports", "IntegrationReports");
-            exportReportsDir = Path.Combine(appDirectory, "Reports", "ExportReports");
+            integrationReportsDir = Path.Combine(userDocuments, "Reports", "IntegrationReports");
+            exportReportsDir = Path.Combine(userDocuments, "Reports", "ExportReports");
         }
 
         private void EnsureReportDirectoriesExist()
@@ -134,7 +134,7 @@ namespace JsonDatabaseMergeApp
                 {
                     MessageBox.Show("Вы не можете выбрать одну и ту же базу данных дважды.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
-                } 
+                }
 
                 secondDatabasePath = selectedPath;
                 TxtSecondDbPath.Text = secondDatabasePath;
@@ -155,17 +155,25 @@ namespace JsonDatabaseMergeApp
 
             if (!ValidateJsonDatabase(validationPath1, out string validationError1))
             {
+                DateTime startTime = DateTime.Now;
+                var ex = new Exception(validationError1);
+                GenerateOperationErrorReport("Интеграция", validationPath1, null, ex, startTime, integrationReportsDir);
+
                 MessageBox.Show($"Ошибка коррекности первой базы данных:\n{validationError1}", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             if (!ValidateJsonDatabase(validationPath2, out string validationError2))
             {
+                DateTime startTime = DateTime.Now;
+                var ex = new Exception(validationError2);
+                GenerateOperationErrorReport("Интеграция", validationPath2, null, ex, startTime, integrationReportsDir);
+
                 MessageBox.Show($"Ошибка коррекности второй базы данных:\n{validationError2}", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             ProgressMerge.Value = 0;
-            await MergeDatabasesAsync(); // без параметра savePath
+            await MergeDatabasesAsync();
         }
 
         private async Task MergeDatabasesAsync()
@@ -332,7 +340,7 @@ namespace JsonDatabaseMergeApp
 
                     foreach (var sample in survey)
                     {
-                        var sampleNode = new TreeViewItem { Header = $"Запись {sample.Id}" };
+                        var sampleNode = new TreeViewItem { Header = $"Проба {sample.Id}" };
 
                         var nameNode = new TreeViewItem { Header = $"Название пробы: {sample.Name}" };
                         var scanTimeNode = new TreeViewItem { Header = $"Время сканирования: {sample.ScanTime}" };
@@ -392,7 +400,7 @@ namespace JsonDatabaseMergeApp
                 }
 
                 CmbSurveyId.ItemsSource = surveyIds;
-                CmbSurveyId.SelectedIndex = 0; 
+                CmbSurveyId.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
@@ -412,6 +420,10 @@ namespace JsonDatabaseMergeApp
 
             if (!ValidateJsonDatabase(validationPath, out string validationError))
             {
+                DateTime startTime = DateTime.Now;
+                var ex = new Exception(validationError);
+                GenerateOperationErrorReport("Экспорт", validationPath, null, ex, startTime, exportReportsDir);
+
                 MessageBox.Show($"Ошибка валидации базы данных:\n{validationError}", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -597,6 +609,7 @@ namespace JsonDatabaseMergeApp
         }
         private void GenerateMergeReport(string pathToSave, List<Sample> resultSamples)
         {
+            DateTime startTime = DateTime.Now;
             try
             {
                 string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
@@ -604,7 +617,7 @@ namespace JsonDatabaseMergeApp
 
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("ОТЧЁТ ОПЕРАЦИИ ИНТЕГРАЦИИ БАЗ ДАННЫХ");
-                sb.AppendLine($"Дата и время: {DateTime.Now}");
+                sb.AppendLine($"Дата и время начала: {startTime}");
                 sb.AppendLine(new string('-', 50));
                 sb.AppendLine($"Первая база: {firstDatabasePath}");
                 sb.AppendLine($"Вторая база: {secondDatabasePath}");
@@ -619,6 +632,18 @@ namespace JsonDatabaseMergeApp
                 }
 
                 sb.AppendLine(new string('-', 50));
+                sb.AppendLine("История добавления записей:");
+                foreach (var sample in resultSamples)
+                {
+                    sb.AppendLine($"{DateTime.Now:HH:mm:ss} — добавлена запись (ID пробы: {sample.Id}, ID съёмки: {sample.SurveyId})");
+                }
+
+                DateTime endTime = DateTime.Now;
+                TimeSpan duration = endTime - startTime;
+
+                sb.AppendLine(new string('-', 50));
+                sb.AppendLine($"Дата и время завершения: {endTime}");
+                sb.AppendLine($"Длительность операции: {duration.TotalSeconds:F2} сек.");
                 sb.AppendLine("Завершено успешно.");
                 File.WriteAllText(reportFile, sb.ToString(), Encoding.UTF8);
             }
@@ -629,6 +654,7 @@ namespace JsonDatabaseMergeApp
         }
         private void GenerateExportReport(string pathToSave, List<Sample> filteredSamples, int selectedSurveyId)
         {
+            DateTime startTime = DateTime.Now;
             try
             {
                 string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
@@ -636,7 +662,7 @@ namespace JsonDatabaseMergeApp
 
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("ОТЧЁТ ОПЕРАЦИИ ЭКСПОРТА ДАННЫХ");
-                sb.AppendLine($"Дата и время: {DateTime.Now}");
+                sb.AppendLine($"Дата и время начала: {DateTime.Now}");
                 sb.AppendLine(new string('-', 50));
                 sb.AppendLine($"База данных для экспорта: {TxtDbPath.Text}");
                 sb.AppendLine($"Сохранённый файл: {pathToSave}");
@@ -644,9 +670,21 @@ namespace JsonDatabaseMergeApp
                 sb.AppendLine($"Общее количество экспортированных записей: {filteredSamples.Count}");
                 sb.AppendLine(new string('-', 50));
 
-                sb.AppendLine($"Съёмка ID: {selectedSurveyId}, записей: {filteredSamples.Count()}");
+                sb.AppendLine($"Съёмка ID: {selectedSurveyId}, записей: {filteredSamples.Count}");
 
                 sb.AppendLine(new string('-', 50));
+                sb.AppendLine("История экспорта записей:");
+                foreach (var sample in filteredSamples)
+                {
+                    sb.AppendLine($"{DateTime.Now:HH:mm:ss} — экспортирована запись (ID пробы: {sample.Id}, ID съёмки: {sample.SurveyId})");
+                }
+
+                DateTime endTime = DateTime.Now;
+                TimeSpan duration = endTime - startTime;
+
+                sb.AppendLine(new string('-', 50));
+                sb.AppendLine($"Дата и время завершения: {endTime}");
+                sb.AppendLine($"Длительность операции: {duration.TotalSeconds:F2} сек.");
                 sb.AppendLine("Завершено успешно.");
 
                 File.WriteAllText(reportFile, sb.ToString(), Encoding.UTF8);
@@ -655,6 +693,30 @@ namespace JsonDatabaseMergeApp
             {
                 MessageBox.Show($"Ошибка при создании отчёта:\n{ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+        private void GenerateOperationErrorReport(string operationName, string databasePath, int? surveyId, Exception exception, DateTime startTime, string reportsDirectory)
+        {
+            DateTime endTime = DateTime.Now;
+            string timestamp = endTime.ToString("yyyy-MM-dd_HH-mm-ss");
+            string reportFile = Path.Combine(reportsDirectory, $"Error_Report_{operationName}_{timestamp}.txt");
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"ОТЧЁТ ОБ ОШИБКЕ ОПЕРАЦИИ: {operationName.ToUpper()}");
+            sb.AppendLine($"Дата начала: {startTime:yyyy-MM-dd}");
+            sb.AppendLine($"Время начала: {startTime:HH:mm:ss}");
+            sb.AppendLine(new string('-', 50));
+
+            sb.AppendLine($"База данных: {databasePath}");
+            sb.AppendLine(new string('-', 50));
+            sb.AppendLine("ПОДРОБНОСТИ ОШИБКИ:");
+            sb.AppendLine(exception.ToString());
+
+            sb.AppendLine(new string('-', 50));
+            sb.AppendLine($"Дата завершения: {endTime:yyyy-MM-dd}");
+            sb.AppendLine($"Время завершения: {endTime:HH:mm:ss}");
+            sb.AppendLine("Статус: ЗАВЕРШЕНО С ОШИБКОЙ");
+
+            File.WriteAllText(reportFile, sb.ToString(), Encoding.UTF8);
         }
     }
 }
